@@ -11,11 +11,11 @@ def get_users():
     """
     Retrieves the list of all User objects
     """
-    all_states = storage.all(User).values()
-    list_states = []
-    for state in all_states:
-        list_states.append(state.to_dict())
-    return jsonify(list_states)
+    all_users = storage.all(User).values()
+    list_users = []
+    for user in all_users:
+        list_users.append(user.to_dict())
+    return jsonify(list_users)
 
 
 # @app_routes.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
@@ -29,7 +29,7 @@ def get_users():
 
 
 @app_routes.route('/users', methods=['POST'], strict_slashes=False)
-def post_state():
+def post_user():
     """
     Creates a User
     """

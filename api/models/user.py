@@ -3,6 +3,7 @@
 from api.models import Base
 from api.models.base_model import BaseModel
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base):
@@ -14,6 +15,9 @@ class User(BaseModel, Base):
     email = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)
     company = Column(String(128), nullable=False)
+    orders = relationship("Order",
+                          backref="user",
+                          cascade="all, delete, delete-orphan")
 
     def __init__(self, *args, **kwargs):
         """initializes User"""

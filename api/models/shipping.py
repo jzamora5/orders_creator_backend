@@ -2,7 +2,8 @@
 
 from api.models import Base
 from api.models.base_model import BaseModel
-from sqlalchemy import Column, String, Float
+from sqlalchemy import Column, String, Float, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class Shipping(BaseModel, Base):
@@ -14,6 +15,8 @@ class Shipping(BaseModel, Base):
     state = Column(String(128), nullable=False)
     country = Column(String(128), nullable=False)
     company = Column(Float, nullable=False)
+    order_id = Column(String(60), ForeignKey('orders.id'), nullable=False)
+    order = relationship("Order", back_populates="shipping")
 
     def __init__(self, *args, **kwargs):
         """Initializes Shipping"""
