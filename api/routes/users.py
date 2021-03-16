@@ -5,7 +5,6 @@ from api.models.user import User
 from api.routes import app_routes
 from flask import abort, jsonify, make_response, request
 from sqlalchemy.exc import IntegrityError
-from api.controllers.auth_controller import AuthController
 
 
 @app_routes.route('/users', methods=['GET'], strict_slashes=False)

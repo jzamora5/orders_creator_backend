@@ -1,6 +1,9 @@
 from os import getenv
 
-SECRET_KEY = getenv('SECRET_KEY', "this_is_a_secret")
+JWT_SECRET_KEY = getenv('SECRET_KEY', "this_is_a_secret")
+JWT_TOKEN_LOCATION = ['cookies']
+JWT_COOKIE_CSRF_PROTECT = True
+JWT_CSRF_CHECK_FORM = True
 
 DB_USERNAME = getenv('RDS_USERNAME')
 DB_PASSWORD = getenv('RDS_PASSWORD')

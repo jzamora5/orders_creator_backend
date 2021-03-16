@@ -3,8 +3,8 @@ from api.models.user import User
 from api.routes import app_routes
 from flask import abort, jsonify, make_response, request
 from sqlalchemy.exc import IntegrityError
-from api.controllers.auth_controller import AuthController
 from api.utils import encrypt_password
+from api.controllers.auth_controller import AuthController
 
 
 @app_routes.route('/auth', methods=['POST'], strict_slashes=False)
@@ -35,7 +35,11 @@ def login_user():
     if not is_valid_password:
         abort(make_response(jsonify({"error": "Wrong password"}), 404))
 
-    return jsonify(user.to_dict())
+    serialized_instance = user.to_dict()
+
+    resp = make_response(jsonify(serialized_instance), 201)
+
+    return AuthController.set_jwt_cookies(resp, data["email"])
 
 
 @app_routes.route('/auth/new', methods=['POST'], strict_slashes=False)
@@ -62,10 +66,8 @@ def post_user():
     except IntegrityError:
         abort(make_response(jsonify({"error": "Email already exists"}), 400))
 
-    token = AuthController.encode_auth_token(instance.id)
-
     serialized_instance = instance.to_dict()
 
-    serialized_instance["jwt_token"] = token
+    resp = make_response(jsonify(serialized_instance), 201)
 
-    return make_response(jsonify(serialized_instance), 201)
+    return AuthController.set_jwt_cookies(resp, data["email"])

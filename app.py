@@ -2,11 +2,15 @@
 
 from api.db.db_storage import DBStorage
 from flask import Flask, make_response, jsonify
+from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
 app = Flask(__name__)
 
 app.config.from_pyfile('config/settings.py')
+
+jwt = JWTManager(app)
+
 
 with app.app_context():
     storage = DBStorage()
