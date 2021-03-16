@@ -1,10 +1,8 @@
 """Entrypoint for API"""
 
-
 from api.db.db_storage import DBStorage
 from flask import Flask, make_response, jsonify
 from flask_cors import CORS
-
 
 app = Flask(__name__)
 

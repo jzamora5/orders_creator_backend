@@ -1,7 +1,7 @@
 """
 Contains the controller for the database
 """
-from api.models.base_model import Base
+from api.models import Base
 from flask import current_app
 from api.models.user import User
 from api.models.order import Order

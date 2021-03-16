@@ -1,6 +1,7 @@
 """ Holds Class User"""
 
-from api.models.base_model import BaseModel, Base
+from api.models import Base
+from api.models.base_model import BaseModel
 from sqlalchemy import Column, String
 
 
