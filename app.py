@@ -10,10 +10,10 @@ app.config.from_pyfile('config/settings.py')
 
 with app.app_context():
     storage = DBStorage()
-storage.reload()
+    storage.reload()
 
-from api.routes import app_routes  # noqa
-app.register_blueprint(app_routes)
+    from api.routes import app_routes  # noqa
+    app.register_blueprint(app_routes)
 
 
 # cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})

@@ -58,6 +58,9 @@ class BaseModel:
         if "__class__" in new_dict:
             del new_dict["__class__"]
 
+        if "password" in new_dict:
+            del new_dict["password"]
+
         return new_dict
 
     def save(self):

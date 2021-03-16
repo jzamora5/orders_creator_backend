@@ -1,5 +1,7 @@
 from os import getenv
 
+SECRET_KEY = getenv('SECRET_KEY', "this_is_a_secret")
+
 DB_USERNAME = getenv('RDS_USERNAME')
 DB_PASSWORD = getenv('RDS_PASSWORD')
 DB_HOSTNAME = getenv('RDS_HOSTNAME')

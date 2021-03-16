@@ -61,6 +61,19 @@ class DBStorage:
 
         return None
 
+    def get_by_attr(self, cls, attr, value):
+        """
+        Returns the object based on the class and its ID, or
+        None if not found
+        """
+        obj = self.__session.query(cls).filter(
+            getattr(cls, attr, None) == value
+        ).first()
+        if obj:
+            return obj
+
+        return None
+
     def close(self):
         """Closes connection to database"""
         self.__session.remove()
