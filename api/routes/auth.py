@@ -39,7 +39,7 @@ def login_user():
 
     resp = make_response(jsonify(serialized_instance), 201)
 
-    return AuthController.set_jwt_cookies(resp, data["email"])
+    return AuthController.set_jwt_cookies(resp, user.id)
 
 
 @app_routes.route('/auth/new', methods=['POST'], strict_slashes=False)
@@ -70,4 +70,4 @@ def post_user():
 
     resp = make_response(jsonify(serialized_instance), 201)
 
-    return AuthController.set_jwt_cookies(resp, data["email"])
+    return AuthController.set_jwt_cookies(resp, instance.id)

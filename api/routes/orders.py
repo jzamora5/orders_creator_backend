@@ -4,7 +4,7 @@ from api.models.order import Order
 from api.models.user import User
 from api.routes import app_routes
 from flask import abort, jsonify, make_response, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import storage
 
 
@@ -14,6 +14,7 @@ def get_orders():
     """
     Retrieves the list of all Order objects
     """
+    print(get_jwt_identity())
     all_orders = storage.all(Order).values()
     list_orders = []
     for order in all_orders:
