@@ -16,7 +16,9 @@ class Order(BaseModel, Base):
     paid = Column(Boolean, nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     shipping = relationship("Shipping", uselist=False, back_populates="order")
-    payment = relationship("Payment", uselist=False, back_populates="order")
+    payments = relationship("Payment",
+                            backref="order",
+                            cascade="all, delete, delete-orphan")
 
     def __init__(self, *args, **kwargs):
         """Initializes Order"""

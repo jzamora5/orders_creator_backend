@@ -14,7 +14,6 @@ class Payment(BaseModel, Base):
     total = Column(Float, nullable=False)
     status = Column(Boolean, nullable=False)
     order_id = Column(String(60), ForeignKey('orders.id'), nullable=False)
-    order = relationship("Order", back_populates="payment")
 
     def __init__(self, *args, **kwargs):
         """Initializes Payment"""
