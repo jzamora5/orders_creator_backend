@@ -14,6 +14,7 @@ class Order(BaseModel, Base):
     sub_total = Column(Float, nullable=False)
     taxes = Column(Float, nullable=False)
     paid = Column(Boolean, nullable=False)
+    status = Column(String(60), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     shipping = relationship("Shipping", uselist=False, back_populates="order")
     payments = relationship("Payment",

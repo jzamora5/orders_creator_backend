@@ -23,8 +23,9 @@ def get_orders():
 
 
 @app_routes.route('/orders/<order_id>', methods=['GET'], strict_slashes=False)
-def get_user(order_id):
-    """ Retrieves a specific State """
+@jwt_required()
+def get_order(order_id):
+    """ Retrieves a specific Order """
     order = storage.get(Order, order_id)
     if not order:
         abort(404)
@@ -33,6 +34,7 @@ def get_user(order_id):
 
 
 @app_routes.route('/users/<user_id>/orders', methods=['POST'], strict_slashes=False)
+@jwt_required()
 def post_order(user_id):
     """
     Creates an Order
@@ -44,7 +46,7 @@ def post_order(user_id):
     if not request.get_json():
         abort(make_response(jsonify({"error": "Not a JSON"}), 400))
 
-    needed_attributes = ["total", "sub_total", "taxes", "paid"]
+    needed_attributes = ["total", "sub_total", "taxes", "paid", "status"]
 
     data = request.get_json()
 
