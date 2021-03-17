@@ -5,9 +5,10 @@ from flask import abort, jsonify, make_response, request
 from sqlalchemy.exc import IntegrityError
 from api.utils import encrypt_password
 from api.controllers.auth_controller import AuthController
+from flask_jwt_extended import jwt_required
 
 
-@app_routes.route('/auth', methods=['POST'], strict_slashes=False)
+@app_routes.route('/auth/login', methods=['POST'], strict_slashes=False)
 def login_user():
     """
     Logs in a User
@@ -42,8 +43,21 @@ def login_user():
     return AuthController.set_jwt_cookies(resp, user.id)
 
 
-@app_routes.route('/auth/new', methods=['POST'], strict_slashes=False)
-def post_user():
+@app_routes.route('/auth/logout', methods=['POST'], strict_slashes=False)
+@jwt_required()
+def logout_user():
+    """
+    Logout a User
+    """
+    resp = make_response(jsonify(), 201)
+
+    AuthController.remove_jwt_cookies_(resp)
+
+    return resp
+
+
+@app_routes.route('/auth/register', methods=['POST'], strict_slashes=False)
+def register_user():
     """
     Creates a User
     """
