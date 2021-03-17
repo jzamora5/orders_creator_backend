@@ -15,11 +15,6 @@ def create_app():
 
     # cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
-    @app.teardown_appcontext
-    def close_db(error):
-        """ Close Storage """
-        storage.close()
-
     @app.errorhandler(404)
     def not_found(error):
         """ 404 Error
@@ -41,3 +36,9 @@ with app.app_context():
 
     from api.routes import app_routes  # noqa
     app.register_blueprint(app_routes)
+
+
+@app.teardown_appcontext
+def close_db(error):
+    """ Close Storage """
+    storage.close()
