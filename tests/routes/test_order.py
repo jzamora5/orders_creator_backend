@@ -5,6 +5,7 @@ from flask import jsonify
 from flask_jwt_extended import create_access_token, set_access_cookies
 from ..conftest import _get_cookie_from_response
 import pytest
+import time
 
 order = 2
 
@@ -78,6 +79,8 @@ class TestCreate:
             f'api/users/{user_id}/orders', data=json.dumps(data), content_type='application/json')
         assert response.status_code == 201
 
+        pytest.order_id = response.json["id"]
+
         response_json = response.json
 
         assert response_json["sub_total"] == data["sub_total"]
@@ -86,8 +89,6 @@ class TestCreate:
         assert response_json["taxes"] == data["sub_total"] * (19/100)
         assert response_json["total"] == data["sub_total"] * \
             (19/100) + data["sub_total"]
-
-        pytest.order_id = response.json["id"]
 
         test_client.set_cookie(
             "0.0.0.0", 'access_token_cookie', user_data["second_access_token"])
@@ -150,6 +151,8 @@ class TestGetAllOrders:
         test_client.set_cookie(
             "0.0.0.0", 'access_token_cookie', user_data["access_token"])
 
+        time.sleep(0.1)
+
 
 @pytest.mark.order(order + 2)
 class TestGetOrder:
@@ -171,7 +174,7 @@ class TestGetOrder:
 
     def test_get_order(self, test_client, user_data):
         order_id = pytest.order_id
-
+        # time.sleep(0.2)
         response = test_client.get(f'api/order/{order_id}')
         assert response.status_code == 200
 
