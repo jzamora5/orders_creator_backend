@@ -45,19 +45,6 @@ def test_register():
             response = testing_client.post(
                 'api/auth/register', data=json.dumps(data), content_type='application/json')
 
-            user_id = response.json["id"]
-
-            data = {
-                "sub_total": 500000,
-                "status": 'in_progress'
-            }
-
-            response = testing_client.post(
-                f'api/users/{user_id}/orders', data=json.dumps(data), content_type='application/json')
-            assert response.status_code == 201
-
-            pytest.second_order_id = response.json["id"]
-
 
 @pytest.fixture(scope='module')
 def test_client():

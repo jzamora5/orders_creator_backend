@@ -64,18 +64,6 @@ class TestCreate:
         assert response.json == {'error': 'Subtotal must be a valid number'}
 
     def test_valid_creation(self, test_client, user_data):
-        # user_id = user_data["second_user_id"]
-
-        # data = {
-        #     "sub_total": 300000,
-        #     "status": 'in_progress'
-        # }
-
-        # response = test_client.post(
-        #     f'api/users/{user_id}/orders', data=json.dumps(data), content_type='application/json')
-        # assert response.status_code == 201
-
-        # pytest.second_order_id = response.json["id"]
 
         user_id = user_data["user_id"]
 
@@ -89,6 +77,22 @@ class TestCreate:
         assert response.status_code == 201
 
         pytest.order_id = response.json["id"]
+
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["second_access_token"])
+
+        user_id = user_data["second_user_id"]
+
+        data = {
+            "sub_total": 300000,
+            "status": 'in_progress'
+        }
+
+        response = test_client.post(
+            f'api/users/{user_id}/orders', data=json.dumps(data), content_type='application/json')
+        assert response.status_code == 201
+
+        pytest.second_order_id = response.json["id"]
 
 
 @pytest.mark.order(2)
