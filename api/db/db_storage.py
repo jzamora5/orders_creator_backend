@@ -68,7 +68,7 @@ class DBStorage:
         """
         obj = self.__session.query(cls).filter(
             getattr(cls, attr, None) == value
-        ).first()
+        )
         if obj:
             return obj
 

@@ -13,7 +13,7 @@ class Order(BaseModel, Base):
     total = Column(Float, nullable=False)
     sub_total = Column(Float, nullable=False)
     taxes = Column(Float, nullable=False)
-    paid = Column(Boolean, nullable=False)
+    paid = Column(Boolean, nullable=False, default=False)
     status = Column(String(60), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     shipping = relationship("Shipping", uselist=False, back_populates="order")

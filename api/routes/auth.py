@@ -25,7 +25,7 @@ def login_user():
         if needed not in data:
             abort(make_response(jsonify({"error": f"Missing {needed}"}), 400))
 
-    user = storage.get_by_attr(User, "email", data["email"])
+    user = storage.get_by_attr(User, "email", data["email"]).first()
 
     if not user:
         abort(make_response(jsonify({"error": "User not found"}), 404))
