@@ -24,19 +24,19 @@ def post_shipping(order_id):
     if not request.get_json():
         abort(make_response(jsonify({"error": "Not a JSON"}), 400))
 
-    # needed_attributes = ["sub_total", "status"]
+    needed_attributes = ["address", "city", "state", "country", "cost"]
 
-    # data = request.get_json()
+    data = request.get_json()
 
-    # for needed in needed_attributes:
-    #     if needed not in data:
-    #         abort(make_response(jsonify({"error": f"Missing {needed}"}), 400))
+    for needed in needed_attributes:
+        if needed not in data:
+            abort(make_response(jsonify({"error": f"Missing {needed}"}), 400))
 
-    # try:
-    #     float(data["sub_total"])
-    # except ValueError:
-    #     abort(make_response(
-    #         jsonify({"error": "Subtotal must be a valid number"}), 400))
+    try:
+        float(data["cost"])
+    except ValueError:
+        abort(make_response(
+            jsonify({"error": "Cost must be a valid number"}), 400))
 
     # instance = Order(**data)
     # instance.user_id = user.id
