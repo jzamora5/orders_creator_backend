@@ -171,14 +171,14 @@ class TestUpdate:
 
     def test_order_not_found(self, test_client, user_data):
         order_id = "123"
-        response = test_client.get(f'api/order/{order_id}/shipping')
+        response = test_client.put(f'api/order/{order_id}/shipping')
         assert response.status_code == 404
         assert response.json == {"error": "Order not found"}
 
     def test_forbidden_user(self, test_client, user_data):
         order_id = pytest.second_order_id
 
-        response = test_client.get(f'api/order/{order_id}/shipping')
+        response = test_client.put(f'api/order/{order_id}/shipping')
         assert response.status_code == 403
         assert response.json == {"error": "forbidden"}
 
@@ -187,15 +187,15 @@ class TestUpdate:
         data = {
             "city": "Colorado",
         }
-        response = test_client.get(
+        response = test_client.put(
             f'api/order/{order_id}/shipping', data=json.dumps(data), content_type='application/json')
         assert response.status_code == 200
-        assert response.json["city"] == "colorado"
+        assert response.json["city"] == "Colorado"
 
     def test_no_cookie(self, test_client, user_data):
         test_client.cookie_jar.clear()
         order_id = "123"
-        response = test_client.get(f'api/order/{order_id}/shipping')
+        response = test_client.put(f'api/order/{order_id}/shipping')
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(

@@ -67,3 +67,29 @@ def get_shipping(order_id):
         abort(make_response(jsonify({"error": "Shipping not found"}), 404))
 
     return jsonify(order.shipping.to_dict())
+
+
+@app_routes.route('/order/<order_id>/shipping', methods=['PUT'], strict_slashes=False)
+@jwt_required()
+def update_shipping(order_id):
+    order = storage.get(Order, order_id)
+    if not order:
+        abort(make_response(jsonify({"error": "Order not found"}), 404))
+
+    if get_jwt_identity() != order.user_id:
+        abort(make_response(jsonify({"error": "forbidden"}), 403))
+
+    shipping = order.shipping
+
+    if not shipping:
+        abort(make_response(jsonify({"error": "Shipping not found"}), 404))
+
+    ignore = ['id', 'created_at', 'updated_at']
+    data = request.get_json()
+    for key, value in data.items():
+        if key not in ignore:
+            setattr(shipping, key, value)
+
+    shipping.save()
+
+    return make_response(jsonify(shipping.to_dict()), 200)
