@@ -7,7 +7,7 @@ from ..conftest import _get_cookie_from_response
 import pytest
 
 
-@pytest.mark.order(1)
+@pytest.mark.order(2)
 class TestCreate:
     """Tests for Creating Orders"""
 
@@ -94,8 +94,16 @@ class TestCreate:
 
         pytest.second_order_id = response.json["id"]
 
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        user_id = "123"
+        response = test_client.post(f'api/users/{user_id}/orders')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
 
-@pytest.mark.order(2)
+
 class TestGetAllOrders:
     """
     Test for getting orders of user
@@ -121,8 +129,49 @@ class TestGetAllOrders:
         assert response.status_code == 200
         assert type(response.json) == list
 
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        user_id = "123"
+        response = test_client.get(f'api/orders/{user_id}')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
 
-@pytest.mark.order(3)
+
+class TestGetOrder:
+    """
+    Test for getting an specific order
+    """
+
+    def test_get_order_not_found(self, test_client, user_data):
+        order_id = "12345"
+        response = test_client.get(f'api/order/{order_id}')
+        assert response.status_code == 404
+        assert response.json == {"error": "Order not found"}
+
+    def test_forbidden_user(self, test_client, user_data):
+        order_id = pytest.second_order_id
+
+        response = test_client.get(f'api/order/{order_id}')
+        assert response.status_code == 403
+
+    def test_get_order(self, test_client, user_data):
+        order_id = pytest.order_id
+
+        response = test_client.get(f'api/order/{order_id}')
+        assert response.status_code == 200
+
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        order_id = "123"
+        response = test_client.get(f'api/order/{order_id}')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+
+
 class TestUpdateOrder:
     """
     Test for updating order
@@ -149,3 +198,12 @@ class TestUpdateOrder:
             f'api/order/{order_id}', data=json.dumps(data), content_type='application/json')
         assert response.status_code == 200
         assert response.json["paid"] == True
+
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        order_id = "123"
+        response = test_client.put(f'api/order/{order_id}')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])

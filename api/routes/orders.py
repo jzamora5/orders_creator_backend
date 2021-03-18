@@ -28,6 +28,20 @@ def get_user_orders(user_id):
     return jsonify(orders_list)
 
 
+@app_routes.route('/order/<order_id>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_order(order_id):
+    """ Retrieves specific Order """
+    order = storage.get(Order, order_id)
+    if not order:
+        abort(make_response(jsonify({"error": "Order not found"}), 404))
+
+    if get_jwt_identity() != order.user_id:
+        abort(make_response(jsonify({"error": "forbidden"}), 403))
+
+    return jsonify()
+
+
 @app_routes.route('/users/<user_id>/orders', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def post_order(user_id):

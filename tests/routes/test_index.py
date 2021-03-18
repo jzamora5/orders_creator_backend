@@ -1,6 +1,8 @@
 """Testing index endpoints"""
+import pytest
 
 
+@pytest.mark.order(1)
 def test_status(test_client):
     """
     Test for status
