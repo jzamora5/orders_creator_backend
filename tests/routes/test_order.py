@@ -6,8 +6,10 @@ from flask_jwt_extended import create_access_token, set_access_cookies
 from ..conftest import _get_cookie_from_response
 import pytest
 
+order = 2
 
-@pytest.mark.order(2)
+
+@pytest.mark.order(order)
 class TestCreate:
     """Tests for Creating Orders"""
 
@@ -104,6 +106,7 @@ class TestCreate:
             "0.0.0.0", 'access_token_cookie', user_data["access_token"])
 
 
+@pytest.mark.order(order + 1)
 class TestGetAllOrders:
     """
     Test for getting orders of user
@@ -139,6 +142,7 @@ class TestGetAllOrders:
             "0.0.0.0", 'access_token_cookie', user_data["access_token"])
 
 
+@pytest.mark.order(order + 2)
 class TestGetOrder:
     """
     Test for getting an specific order
@@ -172,6 +176,7 @@ class TestGetOrder:
             "0.0.0.0", 'access_token_cookie', user_data["access_token"])
 
 
+@pytest.mark.order(order + 3)
 class TestUpdateOrder:
     """
     Test for updating order
