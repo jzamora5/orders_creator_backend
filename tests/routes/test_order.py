@@ -78,6 +78,15 @@ class TestCreate:
             f'api/users/{user_id}/orders', data=json.dumps(data), content_type='application/json')
         assert response.status_code == 201
 
+        response_json = response.json
+
+        assert response_json["sub_total"] == data["sub_total"]
+        assert response_json["status"] == data["status"]
+        assert response_json["paid"] == False
+        assert response_json["taxes"] == data["sub_total"] * (19/100)
+        assert response_json["total"] == data["sub_total"] * \
+            (19/100) + data["sub_total"]
+
         pytest.order_id = response.json["id"]
 
         test_client.set_cookie(
@@ -193,6 +202,7 @@ class TestUpdateOrder:
 
         response = test_client.put(f'api/order/{order_id}')
         assert response.status_code == 403
+        assert response.json == {"error": "forbidden"}
 
     def test_update_order_paid(self, test_client, user_data):
         order_id = pytest.order_id

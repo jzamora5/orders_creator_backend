@@ -38,9 +38,7 @@ def post_shipping(order_id):
         abort(make_response(
             jsonify({"error": "Cost must be a valid number"}), 400))
 
-    # instance = Order(**data)
-    # instance.user_id = user.id
-    # instance.taxes = instance.sub_total * (TAXES_PERCENTAGE / 100)
-    # instance.total = instance.taxes + instance.sub_total
-    # instance.save()
-    # return make_response(jsonify(instance.to_dict()), 201)
+    instance = Shipping(**data)
+    instance.order_id = order_id
+    instance.save()
+    return make_response(jsonify(instance.to_dict()), 201)
