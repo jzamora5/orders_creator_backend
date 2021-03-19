@@ -1,6 +1,6 @@
 from api.models.order import Order
 from api.models.user import User
-from api.models.shipping import Shipping
+from api.models.payment import Payment
 from api.routes import app_routes
 from flask import abort, jsonify, make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -27,19 +27,19 @@ def post_payment(order_id):
 
     needed_attributes = ["status", "payment_type", "total"]
 
-    # data = request.get_json()
+    data = request.get_json()
 
-    # for needed in needed_attributes:
-    #     if needed not in data:
-    #         abort(make_response(jsonify({"error": f"Missing {needed}"}), 400))
+    for needed in needed_attributes:
+        if needed not in data:
+            abort(make_response(jsonify({"error": f"Missing {needed}"}), 400))
 
-    # try:
-    #     float(data["cost"])
-    # except ValueError:
-    #     abort(make_response(
-    #         jsonify({"error": "Cost must be a valid number"}), 400))
+    try:
+        float(data["total"])
+    except ValueError:
+        abort(make_response(
+            jsonify({"error": "Total must be a valid number"}), 400))
 
-    # instance = Shipping(**data)
-    # instance.order_id = order_id
-    # instance.save()
-    # return make_response(jsonify(instance.to_dict()), 201)
+    instance = Payment(**data)
+    instance.order_id = order_id
+    instance.save()
+    return make_response(jsonify(instance.to_dict()), 201)
