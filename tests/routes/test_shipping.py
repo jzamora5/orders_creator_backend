@@ -69,8 +69,8 @@ class TestCreate:
 
     def test_creation(self, test_client, user_data):
         order_id = pytest.order_id
-        print("Cheese")
-        print(order_id)
+        # print("Cheese")
+        # print(order_id)
         data = {
             "address": "Marylan 12 Street",
             "city": "San Francisco",
