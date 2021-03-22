@@ -17,7 +17,9 @@ def get_users():
     all_users = storage.all(User).values()
     list_users = []
     for user in all_users:
-        list_users.append(user.to_dict())
+        user_dict = user.to_dict()
+        # del user_dict["order"]
+        list_users.append(user_dict)
     return jsonify(list_users)
 
 
@@ -34,6 +36,7 @@ def get_users_list_orders(user_id_list):
             continue
 
         for order in user.orders:
-            orders_list.append(order.to_dict())
+            order_dict = order.to_dict()
+            orders_list.append(order_dict)
 
     return jsonify(orders_list)

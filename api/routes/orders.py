@@ -127,7 +127,6 @@ def get_orders_by_shipment():
 
         if check:
             order_dict = order.to_dict()
-            del order_dict["shipping"]
             list_orders.append(order_dict)
 
     return jsonify(list_orders)
@@ -167,7 +166,6 @@ def get_orders_by_term(term):
 
         if check:
             order_dict = order.to_dict()
-            del order_dict["shipping"]
             list_orders.append(order_dict)
 
     return jsonify(list_orders)

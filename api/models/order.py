@@ -29,10 +29,21 @@ class Order(BaseModel, Base):
     def to_dict(self):
         new_dict = super().to_dict()
         shipping = self.shipping
+        user = self.user
 
         if shipping:
             new_dict["shipping_info"] = shipping.to_dict()
         else:
             new_dict["shipping_info"] = "Not Available"
+
+        if user:
+            user_dict = user.to_dict()
+            user_dict.pop("orders", None)
+            new_dict["user_information"] = user_dict
+        else:
+            new_dict["user_information"] = "Not Available"
+
+        new_dict.pop("user", None)
+        new_dict.pop("shipping", None)
 
         return new_dict
