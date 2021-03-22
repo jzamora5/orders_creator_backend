@@ -254,11 +254,13 @@ class TestUpdate:
 
     def test_update_payment_status(self, test_client, user_data):
         order_id = pytest.order_id
+        payment_id = pytest.payment_id
         data = {
             "status": "rejected",
         }
+
         response = test_client.put(
-            f'api/order/{order_id}/shipping', data=json.dumps(data), content_type='application/json')
+            f'api/order/{order_id}/payments/{payment_id}', data=json.dumps(data), content_type='application/json')
         assert response.status_code == 200
         assert response.json["status"] == data["status"]
 
