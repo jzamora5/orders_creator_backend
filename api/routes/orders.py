@@ -133,6 +133,46 @@ def get_orders_by_shipment():
     return jsonify(list_orders)
 
 
+@app_routes.route('/orders/search/<term>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_orders_by_term(term):
+
+    all_orders = storage.all(Order).values()
+    list_orders = []
+    for order in all_orders:
+        check = 0
+        order_dict = order.to_dict()
+
+        for k, v in order_dict.items():
+            if term in str(v).strip().lower():
+                check = 1
+                break
+
+        if not check and order.shipping:
+            shipping_dict = order.shipping.to_dict()
+            for k, v in shipping_dict.items():
+                if term in str(v).strip().lower():
+                    check = 1
+                    break
+
+        if not check and order.payments:
+            for payment in order.payments:
+                payment_dict = payment.to_dict()
+                for k, v in payment_dict.items():
+                    if term in str(v).strip().lower():
+                        check = 1
+                        break
+                if check:
+                    break
+
+        if check:
+            order_dict = order.to_dict()
+            del order_dict["shipping"]
+            list_orders.append(order_dict)
+
+    return jsonify(list_orders)
+
+
 @app_routes.route('/order/<order_id>', methods=['PUT'], strict_slashes=False)
 @jwt_required()
 def update_order(order_id):
