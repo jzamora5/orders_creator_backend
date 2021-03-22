@@ -123,7 +123,7 @@ class TestGetAllPayments:
         order_id = "12345"
         response = test_client.get(f'api/order/{order_id}/payments')
         assert response.status_code == 404
-        assert response.json == {"error": "User not found"}
+        assert response.json == {"error": "Order not found"}
 
     def test_forbidden_user(self, test_client, user_data):
         order_id = pytest.second_order_id

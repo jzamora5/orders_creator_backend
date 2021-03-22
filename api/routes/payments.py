@@ -43,3 +43,22 @@ def post_payment(order_id):
     instance.order_id = order_id
     instance.save()
     return make_response(jsonify(instance.to_dict()), 201)
+
+
+@app_routes.route('/order/<order_id>/payments', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_payments(order_id):
+    order = storage.get(Order, order_id)
+    if not order:
+        abort(make_response(jsonify({"error": "Order not found"}), 404))
+
+    if get_jwt_identity() != order.user_id:
+        abort(make_response(jsonify({"error": "forbidden"}), 403))
+
+    payments = order.payments
+
+    payments_list = []
+    for payment in payments:
+        payments_list.append(payment.to_dict())
+
+    return jsonify(payments_list)
