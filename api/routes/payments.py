@@ -8,7 +8,7 @@ from app import storage
 from time import sleep
 
 
-@app_routes.route('/order/<order_id>/payment', methods=['POST'], strict_slashes=False)
+@app_routes.route('/order/<order_id>/payments', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def post_payment(order_id):
     """

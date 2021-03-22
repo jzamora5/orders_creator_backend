@@ -16,14 +16,14 @@ class TestCreate:
     def test_non_existing_order(self, test_client, user_data):
         order_id = "123"
 
-        response = test_client.post(f'api/order/{order_id}/payment')
+        response = test_client.post(f'api/order/{order_id}/payments')
         assert response.status_code == 404
         assert response.json == {"error": "Order not found"}
 
     def test_forbidden_user(self, test_client, user_data):
         order_id = pytest.second_order_id
 
-        response = test_client.post(f'api/order/{order_id}/payment')
+        response = test_client.post(f'api/order/{order_id}/payments')
         assert response.status_code == 403
 
     def test_invalid_json(self, test_client, user_data):
@@ -32,7 +32,7 @@ class TestCreate:
         data = {
         }
 
-        response = test_client.post(f'api/order/{order_id}/payment')
+        response = test_client.post(f'api/order/{order_id}/payments')
         assert response.status_code == 400
         assert response.json == {'error': 'Not a JSON'}
 
@@ -45,7 +45,7 @@ class TestCreate:
         }
 
         response = test_client.post(
-            f'api/order/{order_id}/payment', data=json.dumps(data), content_type='application/json')
+            f'api/order/{order_id}/payments', data=json.dumps(data), content_type='application/json')
         assert response.status_code == 400
         assert response.json == {'error': 'Missing total'}
 
@@ -60,7 +60,7 @@ class TestCreate:
         }
 
         response = test_client.post(
-            f'api/order/{order_id}/payment', data=json.dumps(data), content_type='application/json')
+            f'api/order/{order_id}/payments', data=json.dumps(data), content_type='application/json')
         assert response.status_code == 400
         assert response.json == {'error': 'Total must be a valid number'}
 
@@ -74,7 +74,7 @@ class TestCreate:
         }
 
         response = test_client.post(
-            f'api/order/{order_id}/payment', data=json.dumps(data), content_type='application/json')
+            f'api/order/{order_id}/payments', data=json.dumps(data), content_type='application/json')
         assert response.status_code == 201
 
         response_json = response.json
@@ -83,12 +83,69 @@ class TestCreate:
         assert response_json["payment_type"] == data["payment_type"]
         assert response_json["total"] == data["total"]
 
+        pytest.payment_id = response.json["id"]
+
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["second_access_token"])
+
+        order_id = pytest.second_order_id
+
+        data = {
+            "status": "processing",
+            "payment_type": "debit",
+            "total": 80000
+        }
+
+        response = test_client.post(
+            f'api/order/{order_id}/payments', data=json.dumps(data), content_type='application/json')
+        assert response.status_code == 201
+
+        pytest.second_payment_id = response.json["id"]
+
     def test_no_cookie(self, test_client, user_data):
         test_client.cookie_jar.clear()
         order_id = "123"
         response = test_client.post(
-            f'api/order/{order_id}/payment')
+            f'api/order/{order_id}/payments')
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
             "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+
+
+@pytest.mark.order(order + 1)
+class TestGetAllPayments:
+    """
+    Test for getting orders of user
+    """
+
+    def test_get_order_not_found(self, test_client, user_data):
+        order_id = "12345"
+        response = test_client.get(f'api/order/{order_id}/payments')
+        assert response.status_code == 404
+        assert response.json == {"error": "User not found"}
+
+    def test_forbidden_user(self, test_client, user_data):
+        order_id = pytest.second_order_id
+
+        response = test_client.get(f'api/order/{order_id}/payments')
+        assert response.status_code == 403
+        assert response.json == {"error": "forbidden"}
+
+    def test_get_all_payments(self, test_client, user_data):
+        order_id = pytest.order_id
+
+        response = test_client.get(f'api/order/{order_id}/payments')
+        assert response.status_code == 200
+        assert type(response.json) == list
+
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        user_id = "123"
+        response = test_client.get(f'api/orders/{user_id}')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+
+        time.sleep(0.1)
