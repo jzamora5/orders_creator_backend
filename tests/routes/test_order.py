@@ -7,7 +7,7 @@ from ..conftest import _get_cookie_from_response
 import pytest
 import time
 
-order = 2
+order = 4
 
 
 @pytest.mark.order(order)

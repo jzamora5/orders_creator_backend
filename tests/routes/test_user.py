@@ -10,7 +10,28 @@ from api.models.user import User
 order = 2
 
 
-class TestCreate:
+@pytest.mark.order(order)
+class TestGetAllUsers:
+    """Tests for getting all users information"""
+
+    def test_get_users(self, test_client, user_data):
+        response = test_client.get(f'api/users/all')
+        assert response.status_code == 200
+
+        response_json = response.json
+        assert len(response_json) == 2
+
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        response = test_client.get(f'api/users/all')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+
+
+@pytest.mark.order(order + 1)
+class TestGetUser:
     """Tests for getting a user information"""
 
     def test_get_user_not_found(self, test_client, user_data):
@@ -44,3 +65,12 @@ class TestCreate:
         assert response_json["last_name"] == data["last_name"]
         assert response_json["email"] == data["email"]
         assert response_json.get("password") == None
+
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        user_id = "12345"
+        response = test_client.get(f'api/users/{user_id}')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
