@@ -216,3 +216,59 @@ class TestGetPayment:
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
             "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+
+
+@pytest.mark.order(order + 3)
+class TestUpdate:
+
+    def test_order_not_found(self, test_client, user_data):
+        order_id = "12345"
+        payment_id = "12345"
+        response = test_client.put(
+            f'api/order/{order_id}/payments/{payment_id}')
+        assert response.status_code == 404
+        assert response.json == {"error": "Order not found"}
+
+    def test_put_payment_not_found(self, test_client, user_data):
+        order_id = pytest.order_id
+        payment_id = "12345"
+        response = test_client.put(
+            f'api/order/{order_id}/payments/{payment_id}')
+        assert response.status_code == 404
+        assert response.json == {"error": "Payment not found"}
+
+    def test_put_payment_not_found_different_order(self, test_client, user_data):
+        order_id = pytest.order_id
+        payment_id = pytest.second_payment_id
+        response = test_client.put(
+            f'api/order/{order_id}/payments/{payment_id}')
+        assert response.status_code == 404
+        assert response.json == {"error": "Payment not found"}
+
+    def test_forbidden_user(self, test_client, user_data):
+        order_id = pytest.second_order_id
+        payment_id = pytest.second_payment_id
+        response = test_client.put(
+            f'api/order/{order_id}/payments/{payment_id}')
+        assert response.status_code == 403
+
+    def test_update_payment_status(self, test_client, user_data):
+        order_id = pytest.order_id
+        data = {
+            "status": "rejected",
+        }
+        response = test_client.put(
+            f'api/order/{order_id}/shipping', data=json.dumps(data), content_type='application/json')
+        assert response.status_code == 200
+        assert response.json["status"] == data["status"]
+
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        order_id = "12345"
+        payment_id = "12345"
+        response = test_client.put(
+            f'api/order/{order_id}/payments/{payment_id}')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
