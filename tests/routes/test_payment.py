@@ -173,6 +173,14 @@ class TestGetPayment:
         assert response.status_code == 404
         assert response.json == {"error": "Payment not found"}
 
+    def test_get_payment_not_found_different_order(self, test_client, user_data):
+        order_id = pytest.order_id
+        payment_id = pytest.second_payment_id
+        response = test_client.get(
+            f'api/order/{order_id}/payments/{payment_id}')
+        assert response.status_code == 404
+        assert response.json == {"error": "Payment not found"}
+
     def test_forbidden_user(self, test_client, user_data):
         order_id = pytest.second_order_id
         payment_id = pytest.second_payment_id
@@ -181,16 +189,16 @@ class TestGetPayment:
         assert response.status_code == 403
 
     def test_get_payment(self, test_client, user_data):
-        order_id = pytest.second_order_id
-        payment_id = pytest.second_payment_id
+        order_id = pytest.order_id
+        payment_id = pytest.payment_id
         response = test_client.get(
             f'api/order/{order_id}/payments/{payment_id}')
         assert response.status_code == 200
 
-        data = {
-            "status": "processing",
-            "payment_type": "debit",
-            "total": 80000
+        data = data = {
+            "status": "ok",
+            "payment_type": "card",
+            "total": 100000
         }
 
         response_json = response.json
