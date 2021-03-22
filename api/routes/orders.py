@@ -104,6 +104,36 @@ def get_order_list(order_id_list):
     return jsonify(orders_list)
 
 
+@app_routes.route('/orders/shipping', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_orders_by_shipment():
+    filters = ["address", "city", "state", "country", "cost"]
+    args = request.args
+
+    all_orders = storage.all(Order).values()
+
+    list_orders = []
+    for order in all_orders:
+
+        check = 1
+        for k, v in args.items():
+            if k not in filters:
+                continue
+            v = v.strip().lower()
+            current = getattr(order.shipping, k, "").strip().lower()
+
+            if v != current:
+                check = 0
+                break
+
+        if check:
+            order_dict = order.to_dict()
+            del order_dict["shipping"]
+            list_orders.append(order_dict)
+
+    return jsonify(list_orders)
+
+
 @app_routes.route('/order/<order_id>', methods=['PUT'], strict_slashes=False)
 @jwt_required()
 def update_order(order_id):

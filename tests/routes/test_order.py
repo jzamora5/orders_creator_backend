@@ -8,7 +8,7 @@ import pytest
 
 
 order = 4
-TAXES_PERCENTAGE = 17
+TAXES_PERCENTAGE = 19
 
 
 @pytest.mark.order(order)

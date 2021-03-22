@@ -4,7 +4,7 @@ from api.models.order import Order
 
 order = 2
 
-TAXES_PERCENTAGE = 17
+TAXES_PERCENTAGE = 19
 
 
 @pytest.mark.order(order)

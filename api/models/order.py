@@ -2,6 +2,7 @@
 
 from api.models import Base
 from api.models.base_model import BaseModel
+from api.models.shipping import Shipping
 from sqlalchemy import Column, String, ForeignKey, Float, Boolean
 from sqlalchemy.orm import relationship
 
@@ -24,3 +25,14 @@ class Order(BaseModel, Base):
     def __init__(self, *args, **kwargs):
         """Initializes Order"""
         super().__init__(*args, **kwargs)
+
+    def to_dict(self):
+        new_dict = super().to_dict()
+        shipping = self.shipping
+
+        if shipping:
+            new_dict["shipping_info"] = shipping.to_dict()
+        else:
+            new_dict["shipping_info"] = "Not Available"
+
+        return new_dict
