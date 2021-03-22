@@ -47,7 +47,7 @@ def post_payment(order_id):
 
 @app_routes.route('/order/<order_id>/payments', methods=['GET'], strict_slashes=False)
 @jwt_required()
-def get_payments(order_id):
+def get_payment(order_id):
     order = storage.get(Order, order_id)
     if not order:
         abort(make_response(jsonify({"error": "Order not found"}), 404))
@@ -62,3 +62,15 @@ def get_payments(order_id):
         payments_list.append(payment.to_dict())
 
     return jsonify(payments_list)
+
+
+@app_routes.route('/order/<order_id>/payments/<payment_id>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_payments(order_id, payment_id):
+    order = storage.get(Order, order_id)
+    if not order:
+        abort(make_response(jsonify({"error": "Order not found"}), 404))
+
+    payment = storage.get(Payment, payment_id)
+    if not order:
+        abort(make_response(jsonify({"error": "Payment not found"}), 404))
