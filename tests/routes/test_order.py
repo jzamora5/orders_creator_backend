@@ -249,7 +249,7 @@ class TestGetOrdersList:
 
 
 @pytest.mark.order(order + 4)
-class TestGetOrdersList:
+class TestGetOrdersByShipping:
     """Tests for getting orders based on shipping filter"""
 
     def test_non_existing_orders(self, test_client, user_data):
@@ -344,9 +344,24 @@ class TestGetOrdersList:
         assert response.status_code == 200
         response_json = response.json
 
-        assert response_json[0]["status"] == orders[0]["status"]
-        assert response_json[1]["status"] == orders[2]["status"]
+        assert len(response_json) == 2
 
+
+@pytest.mark.order(order + 5)
+class TestGetOrdersBySearchTerm:
+    """Tests for getting orders based on search term"""
+
+    def test_random_term(self, test_client, user_data):
+        response = test_client.get(f'api/orders/search/cheese')
+        assert response.status_code == 200
+        response_json = response.json
+        assert response_json == []
+
+    def test_non_existing_orders(self, test_client, user_data):
+        response = test_client.get(f'api/orders/search/process')
+        assert response.status_code == 200
+        response_json = response.json
+        assert response_json == []
 
 # @pytest.mark.order(order + 3)
 # class TestUpdateOrder:

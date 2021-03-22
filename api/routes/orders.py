@@ -114,7 +114,6 @@ def get_orders_by_shipment():
 
     list_orders = []
     for order in all_orders:
-
         check = 1
         for k, v in args.items():
             if k not in filters:
