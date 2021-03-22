@@ -21,12 +21,19 @@ def get_users():
     return jsonify(list_users)
 
 
-# @app_routes.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
-# @jwt_required()
-# def get_user(user_id):
-#     """ Retrieves a specific User """
-#     user = storage.get(User, user_id)
-#     if not user:
-#         abort(make_response(jsonify({"error": "User not found"}), 404))
+@app_routes.route('/users/<user_id_list>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_users_list_orders(user_id_list):
+    """ Retrieves a orders for specific users """
+    users_ids = user_id_list.split(',')
 
-#     return jsonify(user.to_dict())
+    orders_list = []
+    for user_id in users_ids:
+        user = storage.get(User, user_id)
+        if not user:
+            continue
+
+        for order in user.orders:
+            orders_list.append(order.to_dict())
+
+    return jsonify(orders_list)

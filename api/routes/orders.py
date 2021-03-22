@@ -8,26 +8,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import storage
 
 
-@app_routes.route('/orders/<user_id>', methods=['GET'], strict_slashes=False)
-@jwt_required()
-def get_user_orders(user_id):
-    """ Retrieves user Orders """
-    user = storage.get(User, user_id)
-    if not user:
-        abort(make_response(jsonify({"error": "User not found"}), 404))
-
-    if get_jwt_identity() != user_id:
-        abort(make_response(jsonify({"error": "forbidden"}), 403))
-
-    orders = storage.get_by_attr(Order, "user_id", user_id)
-
-    orders_list = []
-    for order in orders:
-        orders_list.append(order.to_dict())
-
-    return jsonify(orders_list)
-
-
 @app_routes.route('/order/<order_id>', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_order(order_id):
@@ -36,10 +16,30 @@ def get_order(order_id):
     if not order:
         abort(make_response(jsonify({"error": "Order not found"}), 404))
 
-    if get_jwt_identity() != order.user_id:
-        abort(make_response(jsonify({"error": "forbidden"}), 403))
+    # if get_jwt_identity() != order.user_id:
+    #     abort(make_response(jsonify({"error": "forbidden"}), 403))
 
     return jsonify()
+
+
+@app_routes.route('/orders/users/<user_id>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_user_orders(user_id):
+    """ Retrieves user Orders """
+    user = storage.get(User, user_id)
+    if not user:
+        abort(make_response(jsonify({"error": "User not found"}), 404))
+
+    # if get_jwt_identity() != user_id:
+    #     abort(make_response(jsonify({"error": "forbidden"}), 403))
+
+    orders = storage.get_by_attr(Order, "user_id", user_id)
+
+    orders_list = []
+    for order in orders:
+        orders_list.append(order.to_dict())
+
+    return jsonify(orders_list)
 
 
 @app_routes.route('/users/<user_id>/orders', methods=['POST'], strict_slashes=False)
@@ -54,8 +54,8 @@ def post_order(user_id):
     if not user:
         abort(make_response(jsonify({"error": "User not found"}), 404))
 
-    if get_jwt_identity() != user_id:
-        abort(make_response(jsonify({"error": "forbidden"}), 403))
+    # if get_jwt_identity() != user_id:
+    #     abort(make_response(jsonify({"error": "forbidden"}), 403))
 
     if not request.get_json():
         abort(make_response(jsonify({"error": "Not a JSON"}), 400))
@@ -82,6 +82,28 @@ def post_order(user_id):
     return make_response(jsonify(instance.to_dict()), 201)
 
 
+@app_routes.route('/orders/<order_id_list>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_order_list(order_id_list):
+    """ Retrieves a orders for specific users """
+    orders_ids = order_id_list.split(',')
+
+    # if len(orders_ids) == 1:
+    #     user = storage.get(User, orders_ids[0])
+    #     if not user:
+    #         abort(make_response(jsonify({"error": "User not found"}), 404))
+
+    orders_list = []
+    for order_id in orders_ids:
+        order = storage.get(Order, order_id)
+        if not order:
+            continue
+
+        orders_list.append(order.to_dict())
+
+    return jsonify(orders_list)
+
+
 @app_routes.route('/order/<order_id>', methods=['PUT'], strict_slashes=False)
 @jwt_required()
 def update_order(order_id):
@@ -89,8 +111,8 @@ def update_order(order_id):
     if not order:
         abort(make_response(jsonify({"error": "Order not found"}), 404))
 
-    if get_jwt_identity() != order.user_id:
-        abort(make_response(jsonify({"error": "forbidden"}), 403))
+    # if get_jwt_identity() != order.user_id:
+    #     abort(make_response(jsonify({"error": "forbidden"}), 403))
 
     ignore = ['id', 'created_at', 'updated_at', "taxes", "total"]
     data = request.get_json()

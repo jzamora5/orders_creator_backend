@@ -1,14 +1,10 @@
-import json
-from flask import jsonify
-from flask_jwt_extended import create_access_token, set_access_cookies
-from ..conftest import _get_cookie_from_response
 import pytest
-import time
-from app import storage
 from api.models.user import User
 from api.models.order import Order
 
 order = 2
+
+TAXES_PERCENTAGE = 17
 
 
 @pytest.mark.order(order)
@@ -44,59 +40,61 @@ class TestGetUsersOrders:
         assert response_json == []
 
     def test_existing_users(self, test_client, user_data):
-        user_id_list = ["123", "345"]
+
+        users = [
+            {
+                "name": "Marco",
+                "last_name": "Polo",
+                "email": "marco2@email.com",
+                "password": "123456789",
+                "company": "coderise"
+            },
+            {
+                "name": "Ramon",
+                "last_name": "Perez",
+                "email": "ramon2@email.com",
+                "password": "123456789",
+                "company": "coderise"
+            }
+        ]
+
+        user_id_list = []
+        for user in users:
+            instance = User(**user)
+            user_id_list.append(instance.id)
+            instance.save()
+
+        orders = [
+            {
+                "sub_total": 600000,
+                "status": "procesing"
+            },
+            {
+                "sub_total": 700000,
+                "status": "rejected"
+            }
+        ]
+
+        order_id_list = []
+        for i in range(len(orders)):
+            instance = Order(**orders[i])
+            instance.user_id = user_id_list[i]
+            instance.taxes = instance.sub_total * (TAXES_PERCENTAGE / 100)
+            instance.total = instance.taxes + instance.sub_total
+
+            order_id_list.append(instance.id)
+            instance.save()
+
         user_ids = ','.join(user_id_list)
-
-        user_1 = {
-            "name": "Marco",
-            "last_name": "Polo",
-            "email": "marco@email.com",
-            "password": "123456789",
-            "company": "coderise"
-        }
-
-        user_2 = {
-            "name": "Ramon",
-            "last_name": "Perez",
-            "email": "ramon@email.com",
-            "password": "123456789",
-            "company": "coderise"
-        }
-
-        instance = User(**user_1)
-        instance.save()
-        user_1_id = instance.id
-        instance = User(**user_2)
-        instance.save()
-        user_2_id = instance.id
-
-        order_1 = {
-            "sub_total": 600000,
-            "status": "procesing"
-        }
-
-        order_2 = {
-            "sub_total": 700000,
-            "status": "rejected"
-        }
-
-        instance = Order(**order_1)
-        instance.user_id = user_1_id
-        instance.save()
-        order_1_id = instance.id
-
-        instance = Order(**order_2)
-        instance.user_id = user_2_id
-        instance.save()
-        order_2_id = instance.id
 
         response = test_client.get(f'api/users/{user_ids}')
         assert response.status_code == 200
         response_json = response.json
-        assert response_json[0]["sub_total"] == user_1["sub_total"]
-        assert response_json[0]["status"] == user_1["status"]
-        assert response_json[1]["status"] == user_2["status"]
-        assert response_json[1]["status"] == user_2["status"]
+
+        assert response_json[0]["sub_total"] == orders[0]["sub_total"]
+        assert response_json[0]["status"] == orders[0]["status"]
+        assert response_json[1]["sub_total"] == orders[1]["sub_total"]
+        assert response_json[1]["status"] == orders[1]["status"]
 
 
 # @pytest.mark.order(order + 1)
