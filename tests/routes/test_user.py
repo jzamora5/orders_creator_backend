@@ -76,7 +76,7 @@ class TestGetUsersOrders:
         ]
 
         order_id_list = []
-        for i, value in enumerate(orders):
+        for i, _ in enumerate(orders):
             instance = Order(**orders[i])
             instance.user_id = user_id_list[i]
             instance.taxes = instance.sub_total * (TAXES_PERCENTAGE / 100)

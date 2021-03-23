@@ -11,6 +11,23 @@ ORDER = 4
 TAXES_PERCENTAGE = 19
 COOKIE_IP = "0.0.0.0"
 
+USERS = [
+    {
+        "name": "Marco",
+        "last_name": "Polo",
+        "email": "marco@email.com",
+        "password": "123456789",
+        "company": "coderise"
+    },
+    {
+        "name": "Ramon",
+        "last_name": "Perez",
+        "email": "ramon@email.com",
+        "password": "123456789",
+        "company": "coderise"
+    }
+]
+
 
 @pytest.mark.order(ORDER)
 class TestCreate:
@@ -194,22 +211,7 @@ class TestGetOrdersList:
         assert response_json == []
 
     def test_existing_order(self, test_client, user_data):
-        users = [
-            {
-                "name": "Marco",
-                "last_name": "Polo",
-                "email": "marco@email.com",
-                "password": "123456789",
-                "company": "coderise"
-            },
-            {
-                "name": "Ramon",
-                "last_name": "Perez",
-                "email": "ramon@email.com",
-                "password": "123456789",
-                "company": "coderise"
-            }
-        ]
+        users = USERS
 
         user_id_list = []
         for user in users:
@@ -229,7 +231,7 @@ class TestGetOrdersList:
         ]
 
         order_id_list = []
-        for i, value in enumerate(orders):
+        for i, _ in enumerate(orders):
             instance = Order(**orders[i])
             instance.user_id = user_id_list[i]
             instance.taxes = instance.sub_total * (TAXES_PERCENTAGE / 100)
@@ -336,7 +338,7 @@ class TestGetOrdersByShipping:
         ]
 
         order_id_list = []
-        for i, value in enumerate(orders):
+        for i, _ in enumerate(orders):
             instance = Order(**orders[i])
             instance.user_id = user_id_list[0]
             instance.taxes = instance.sub_total * (TAXES_PERCENTAGE / 100)
