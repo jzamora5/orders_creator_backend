@@ -65,5 +65,6 @@ class Order(BaseModel, Base):
 
         new_dict.pop("user", None)
         new_dict.pop("shipping", None)
+        new_dict.pop("payments", None)
 
         return new_dict
