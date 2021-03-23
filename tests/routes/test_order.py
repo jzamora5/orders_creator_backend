@@ -87,7 +87,7 @@ class TestCreate:
 
         assert response_json["sub_total"] == data["sub_total"]
         assert response_json["status"] == data["status"]
-        assert response_json["paid"] == False
+        assert not response_json["paid"]
         assert response_json["taxes"] == data["sub_total"] * (19/100)
         assert response_json["total"] == data["sub_total"] * \
             (19/100) + data["sub_total"]
@@ -135,7 +135,7 @@ class TestGetAllUserOrders:
 
         response = test_client.get(f'api/orders/users/{user_id}')
         assert response.status_code == 200
-        assert isinstance(response.json, list) == True
+        assert isinstance(response.json, list)
 
     def test_no_cookie(self, test_client, user_data):
         test_client.cookie_jar.clear()
@@ -229,7 +229,7 @@ class TestGetOrdersList:
         ]
 
         order_id_list = []
-        for i in range(len(orders)):
+        for i, value in enumerate(orders):
             instance = Order(**orders[i])
             instance.user_id = user_id_list[i]
             instance.taxes = instance.sub_total * (TAXES_PERCENTAGE / 100)
@@ -336,7 +336,7 @@ class TestGetOrdersByShipping:
         ]
 
         order_id_list = []
-        for i in range(len(orders)):
+        for i, value in enumerate(orders):
             instance = Order(**orders[i])
             instance.user_id = user_id_list[0]
             instance.taxes = instance.sub_total * (TAXES_PERCENTAGE / 100)

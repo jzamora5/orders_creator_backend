@@ -129,13 +129,13 @@ def get_orders_by_shipment():
     list_orders = []
     for order in all_orders:
         check = 1
-        for k, v in args.items():
-            if k not in filters:
+        for key, value in args.items():
+            if key not in filters:
                 continue
-            v = v.strip().lower()
-            current = getattr(order.shipping, k, "").strip().lower()
+            value = value.strip().lower()
+            current = getattr(order.shipping, key, "").strip().lower()
 
-            if v != current:
+            if value != current:
                 check = 0
                 break
 
@@ -161,23 +161,23 @@ def get_orders_by_term(term):
         check = 0
         order_dict = order.to_dict()
 
-        for k, v in order_dict.items():
-            if term in str(v).strip().lower():
+        for key, value in order_dict.items():
+            if term in str(value).strip().lower():
                 check = 1
                 break
 
         if not check and order.shipping:
             shipping_dict = order.shipping.to_dict()
-            for k, v in shipping_dict.items():
-                if term in str(v).strip().lower():
+            for key, value in shipping_dict.items():
+                if term in str(value).strip().lower():
                     check = 1
                     break
 
         if not check and order.payments:
             for payment in order.payments:
                 payment_dict = payment.to_dict()
-                for k, v in payment_dict.items():
-                    if term in str(v).strip().lower():
+                for key, value in payment_dict.items():
+                    if term in str(value).strip().lower():
                         check = 1
                         break
                 if check:
@@ -199,9 +199,10 @@ def get_orders_by_term(term):
 @jwt_required()
 def get_orders_by_date(date_filter):
 
-    K, splt_char = 3, '-'
+    repetitions, splt_char = 3, '-'
     temp = date_filter.split(splt_char)
-    dates = splt_char.join(temp[:K]), splt_char.join(temp[K:])
+    dates = splt_char.join(
+        temp[:repetitions]), splt_char.join(temp[repetitions:])
 
     try:
         start = datetime.strptime(dates[0], '%d-%m-%y')
