@@ -12,7 +12,7 @@ class TestGetAllUsers:
     """Tests for getting all users information"""
 
     def test_get_users(self, test_client, user_data):
-        response = test_client.get(f'api/users/all')
+        response = test_client.get('api/users/all')
         assert response.status_code == 200
 
         response_json = response.json
@@ -20,7 +20,7 @@ class TestGetAllUsers:
 
     def test_no_cookie(self, test_client, user_data):
         test_client.cookie_jar.clear()
-        response = test_client.get(f'api/users/all')
+        response = test_client.get('api/users/all')
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
@@ -76,7 +76,7 @@ class TestGetUsersOrders:
         ]
 
         order_id_list = []
-        for i in range(len(orders)):
+        for i, value in enumerate(orders):
             instance = Order(**orders[i])
             instance.user_id = user_id_list[i]
             instance.taxes = instance.sub_total * (TAXES_PERCENTAGE / 100)
