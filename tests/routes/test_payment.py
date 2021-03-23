@@ -45,7 +45,8 @@
 #         }
 
 #         response = test_client.post(
-#             f'api/order/{order_id}/payments', data=json.dumps(data), content_type='application/json')
+#             f'api/order/{order_id}/payments', data=json.dumps(data),
+#               content_type='application/json')
 #         assert response.status_code == 400
 #         assert response.json == {'error': 'Missing total'}
 
@@ -60,7 +61,8 @@
 #         }
 
 #         response = test_client.post(
-#             f'api/order/{order_id}/payments', data=json.dumps(data), content_type='application/json')
+#             f'api/order/{order_id}/payments', data=json.dumps(data),
+#               content_type='application/json')
 #         assert response.status_code == 400
 #         assert response.json == {'error': 'Total must be a valid number'}
 
@@ -74,7 +76,8 @@
 #         }
 
 #         response = test_client.post(
-#             f'api/order/{order_id}/payments', data=json.dumps(data), content_type='application/json')
+#             f'api/order/{order_id}/payments', data=json.dumps(data),
+#               content_type='application/json')
 #         assert response.status_code == 201
 
 #         response_json = response.json
@@ -97,7 +100,8 @@
 #         }
 
 #         response = test_client.post(
-#             f'api/order/{order_id}/payments', data=json.dumps(data), content_type='application/json')
+#             f'api/order/{order_id}/payments', data=json.dumps(data),
+#               content_type='application/json')
 #         assert response.status_code == 201
 
 #         pytest.second_payment_id = response.json["id"]
@@ -260,7 +264,8 @@
 #         }
 
 #         response = test_client.put(
-#             f'api/order/{order_id}/payments/{payment_id}', data=json.dumps(data), content_type='application/json')
+#             f'api/order/{order_id}/payments/{payment_id}', data=json.dumps(data),
+#               content_type='application/json')
 #         assert response.status_code == 200
 #         assert response.json["status"] == data["status"]
 

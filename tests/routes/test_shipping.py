@@ -46,7 +46,8 @@
 #         }
 
 #         response = test_client.post(
-#             f'api/order/{order_id}/shipping', data=json.dumps(data), content_type='application/json')
+#             f'api/order/{order_id}/shipping', data=json.dumps(data),
+#               content_type='application/json')
 #         assert response.status_code == 400
 #         assert response.json == {'error': 'Missing city'}
 
@@ -63,7 +64,8 @@
 #         }
 
 #         response = test_client.post(
-#             f'api/order/{order_id}/shipping', data=json.dumps(data), content_type='application/json')
+#             f'api/order/{order_id}/shipping', data=json.dumps(data),
+#               content_type='application/json')
 #         assert response.status_code == 400
 #         assert response.json == {'error': 'Cost must be a valid number'}
 
@@ -80,7 +82,8 @@
 #         }
 
 #         response = test_client.post(
-#             f'api/order/{order_id}/shipping', data=json.dumps(data), content_type='application/json')
+#             f'api/order/{order_id}/shipping', data=json.dumps(data),
+#               content_type='application/json')
 #         assert response.status_code == 201
 
 #         response_json = response.json
@@ -91,21 +94,22 @@
 #         assert response_json["country"] == data["country"]
 #         assert response_json["cost"] == data["cost"]
 
-#     # def test_second_creation(self, test_client, user_data):
-#     #     order_id = pytest.order_id
+# def test_second_creation(self, test_client, user_data):
+#     order_id = pytest.order_id
 
-#     #     data = {
-#     #         "address": "Marylan 12 Street",
-#     #         "city": "San Peter",
-#     #         "state": "California",
-#     #         "country": "Colombia",
-#     #         "cost": 25000
-#     #     }
+#     data = {
+#         "address": "Marylan 12 Street",
+#         "city": "San Peter",
+#         "state": "California",
+#         "country": "Colombia",
+#         "cost": 25000
+#     }
 
-#     #     response = test_client.post(
-#     #         f'api/order/{order_id}/shipping', data=json.dumps(data), content_type='application/json')
-#     #     assert response.status_code == 400
-#     #     assert response.json == {'error': 'Shipping already exists'}
+#     response = test_client.post(
+#         f'api/order/{order_id}/shipping', data=json.dumps(data),
+#         content_type='application/json')
+#     assert response.status_code == 400
+#     assert response.json == {'error': 'Shipping already exists'}
 
 #     def test_no_cookie(self, test_client, user_data):
 #         test_client.cookie_jar.clear()
@@ -187,7 +191,8 @@
 #             "city": "Colorado",
 #         }
 #         response = test_client.put(
-#             f'api/order/{order_id}/shipping', data=json.dumps(data), content_type='application/json')
+#             f'api/order/{order_id}/shipping', data=json.dumps(data),
+#               content_type='application/json')
 #         assert response.status_code == 200
 #         assert response.json["city"] == "Colorado"
 
