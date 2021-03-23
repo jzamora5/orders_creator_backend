@@ -141,10 +141,55 @@ VALUES
     'd3cb5b63-2f99-4c55-86a7-3127eb4a8128',
     '2020-05-20 02:17:06',
     '2020-05-20 02:17:06',
-    'credit',
+    'debit',
     148750,
     'accepted',
     '20f281b1-2cd1-4e36-a7c7-d1062ff16bcd'
+  ),
+  (
+    'd7275f8c-70e5-4c27-bcd6-aafd5256fccd',
+    '2020-05-20 02:17:06',
+    '2020-05-20 02:17:06',
+    'credit',
+    100000,
+    'rejected',
+    '2c620702-d41c-4732-a1cf-6e40f7877dc3'
+  ),
+  (
+    'dcfb45cc-b170-4ace-97af-9957b564606a',
+    '2020-05-20 02:17:06',
+    '2020-05-20 02:17:06',
+    'credit',
+    50000,
+    'rejected',
+    '2c620702-d41c-4732-a1cf-6e40f7877dc3'
+  ),
+  (
+    'e7680872-7b76-4565-aa8b-6c3d182caa1c',
+    '2020-05-20 02:17:06',
+    '2020-05-20 02:17:06',
+    'credit',
+    50000,
+    'ok',
+    '2c620702-d41c-4732-a1cf-6e40f7877dc3'
+  ),
+  (
+    'ea518e20-3370-4cb3-b38f-df1cccbdd8a9',
+    '2020-05-20 02:17:06',
+    '2020-05-20 02:17:06',
+    'debit',
+    80000,
+    'ok',
+    '2c620702-d41c-4732-a1cf-6e40f7877dc3'
+  ),
+  (
+    'efafcf4e-59cf-45e2-b8c5-e14ae252ca01',
+    '2020-05-20 02:17:06',
+    '2020-05-20 02:17:06',
+    'cash',
+    50000,
+    'ok',
+    '2f055228-5fd3-4b1d-a021-7e4b9b7d70a6'
   );
   /*!40000 ALTER TABLE `payments` DISABLE KEYS */;
   /*!40000 ALTER TABLE `payments` ENABLE KEYS */;
@@ -175,6 +220,64 @@ CREATE TABLE `shippings` (
   --
   LOCK TABLES `shippings` WRITE;
   /*!40000 ALTER TABLE `shippings` DISABLE KEYS */;
+INSERT INTO
+  `shippings`
+VALUES
+  (
+    'f4dfd576-7c29-4bdf-9fbd-5c95a170ebce',
+    '2020-03-26 02:17:06',
+    '2020-03-26 02:17:06',
+    'Vona Vibra Street',
+    'Denver',
+    'Colorado',
+    'USA',
+    10000,
+    '20f281b1-2cd1-4e36-a7c7-d1062ff16bcd'
+  ),
+  (
+    'f4e98f0a-053a-42e2-9633-0cca2a587410',
+    '2020-03-26 02:17:06',
+    '2020-03-26 02:17:06',
+    'Chandelier 2030 Street',
+    'Denver',
+    'Colorado',
+    'USA',
+    10000,
+    '2c620702-d41c-4732-a1cf-6e40f7877dc3'
+  ),
+  (
+    'f7a087bb-13e2-463d-a951-b8feb7da899f',
+    '2020-03-26 02:17:06',
+    '2020-03-26 02:17:06',
+    'Empire Doughnut',
+    'New York',
+    'New York',
+    'USA',
+    10000,
+    '2f055228-5fd3-4b1d-a021-7e4b9b7d70a6'
+  ),
+  (
+    'f7c854a4-f565-4aa5-8542-c4e17c498ef1',
+    '2020-03-26 02:17:06',
+    '2020-03-26 02:17:06',
+    'Conjunto Tronquitos',
+    'Chia',
+    'Cundinamarca',
+    'COL',
+    10000,
+    '3e73edf2-c3d6-409f-9202-213df4a7a25a'
+  ),
+  (
+    'c29b5191-ac68-4e9b-a68f-aa42ea1dcb01',
+    '2020-03-26 02:17:06',
+    '2020-03-26 02:17:06',
+    'Centro Historico',
+    'Bogota',
+    'Cundinamarca',
+    'COL',
+    10000,
+    '3fccec93-2842-49a0-8fdb-4008af2ef041'
+  );
   /*!40000 ALTER TABLE `shippings` ENABLE KEYS */;
 UNLOCK TABLES;
 --
