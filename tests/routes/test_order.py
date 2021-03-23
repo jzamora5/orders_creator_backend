@@ -247,6 +247,15 @@ class TestGetOrdersList:
         assert response_json[1]["sub_total"] == orders[1]["sub_total"]
         assert response_json[1]["status"] == orders[1]["status"]
 
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        order_ids = "123"
+        response = test_client.get(f'api/orders/{order_ids}')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+
 
 @pytest.mark.order(order + 4)
 class TestGetOrdersByShipping:
@@ -346,6 +355,15 @@ class TestGetOrdersByShipping:
 
         assert len(response_json) == 2
 
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        response = test_client.get(
+            f'api/orders/shipping?city=Denver&state=Colorado')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+
 
 @pytest.mark.order(order + 5)
 class TestGetOrdersBySearchTerm:
@@ -362,6 +380,40 @@ class TestGetOrdersBySearchTerm:
         assert response.status_code == 200
         response_json = response.json
         assert response_json == []
+
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        response = test_client.get(f'api/orders/search/process')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+
+
+@pytest.mark.order(order + 6)
+class TestGetOrdersByDate:
+    """Tests for getting orders based on date"""
+
+    def test_old_dates(self, test_client, user_data):
+        response = test_client.get(f'api/orders/dates/21-12-19-19-01-20')
+        assert response.status_code == 200
+        response_json = response.json
+        assert response_json == []
+
+    def test_current_dates(self, test_client, user_data):
+        response = test_client.get(f'api/orders/dates/21-12-20-19-01-22')
+        assert response.status_code == 200
+        response_json = response.json
+        assert len(response_json) > 0
+
+    def test_no_cookie(self, test_client, user_data):
+        test_client.cookie_jar.clear()
+        response = test_client.get(f'api/orders/dates/21-12-19-19-01-20')
+        assert response.status_code == 401
+        assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
+        test_client.set_cookie(
+            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+
 
 # @pytest.mark.order(order + 3)
 # class TestUpdateOrder:

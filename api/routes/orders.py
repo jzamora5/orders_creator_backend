@@ -3,9 +3,12 @@
 from api.models.order import Order
 from api.models.user import User
 from api.routes import app_routes
+from datetime import datetime
 from flask import abort, jsonify, make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import storage
+
+TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
 
 @app_routes.route('/order/<order_id>', methods=['GET'], strict_slashes=False)
@@ -165,6 +168,37 @@ def get_orders_by_term(term):
                     break
 
         if check:
+            order_dict = order.to_dict()
+            list_orders.append(order_dict)
+
+    return jsonify(list_orders)
+
+
+@app_routes.route('/orders/dates/<date_filter>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_orders_by_date(date_filter):
+
+    K, splt_char = 3,  '-'
+    temp = date_filter.split(splt_char)
+    dates = splt_char.join(temp[:K]), splt_char.join(temp[K:])
+
+    try:
+        start = datetime.strptime(dates[0], '%d-%m-%y')
+        end = datetime.strptime(dates[1], '%d-%m-%y')
+    except BaseException:
+        abort(make_response(
+            jsonify({"error": "Dates must comply dd-mm-yy format"}), 404))
+
+    if start > end:
+        abort(make_response(
+            jsonify({"error": "Dates must comply with start-end"}), 404))
+
+    all_orders = storage.all(Order).values()
+    list_orders = []
+    for order in all_orders:
+        updated_at = order.updated_at
+
+        if start <= updated_at <= end:
             order_dict = order.to_dict()
             list_orders.append(order_dict)
 
