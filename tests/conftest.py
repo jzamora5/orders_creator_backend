@@ -1,6 +1,6 @@
+import json
 from app import app
 from flask_jwt_extended import create_access_token
-import json
 import pytest
 
 
@@ -31,7 +31,7 @@ def test_register():
                 "company": "personal"
             }
 
-            response = testing_client.post(
+            testing_client.post(
                 'api/auth/register', data=json.dumps(data), content_type='application/json')
 
             data = {
@@ -42,7 +42,7 @@ def test_register():
                 "company": "brokers"
             }
 
-            response = testing_client.post(
+            testing_client.post(
                 'api/auth/register', data=json.dumps(data), content_type='application/json')
 
 
@@ -83,4 +83,9 @@ def user_data(test_client):
 
     user_id = response.json['id']
 
-    return {"access_token": access_token,  "second_access_token": second_access_token, "user_id": user_id, "second_user_id": second_user_id}
+    return {
+        "access_token": access_token,
+        "second_access_token": second_access_token,
+        "user_id": user_id,
+        "second_user_id": second_user_id
+    }
