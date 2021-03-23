@@ -5,7 +5,6 @@ from api.routes import app_routes
 from flask import abort, jsonify, make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import storage
-from time import sleep
 
 
 @app_routes.route('/order/<order_id>/shipping', methods=['POST'], strict_slashes=False)

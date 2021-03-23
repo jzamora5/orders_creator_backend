@@ -154,7 +154,6 @@ def get_orders_by_shipment():
 @app_routes.route('/orders/search/<term>', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_orders_by_term(term):
-
     all_orders = storage.all(Order).values()
     list_orders = []
     for order in all_orders:
@@ -176,22 +175,19 @@ def get_orders_by_term(term):
         if not check and order.payments:
             for payment in order.payments:
                 payment_dict = payment.to_dict()
-                for key, value in payment_dict.items():
+                for _, value in payment_dict.items():
                     if term in str(value).strip().lower():
                         check = 1
                         break
                 if check:
                     break
-
         if check:
             order_dict = order.to_dict()
             list_orders.append(order_dict)
-
     try:
         sort_response(request, list_orders)
     except KeyError:
         pass
-
     return jsonify(list_orders)
 
 
