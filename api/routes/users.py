@@ -24,7 +24,7 @@ def get_users():
 
     try:
         sort_response(request, list_users)
-    except:
+    except KeyError:
         pass
 
     return jsonify(list_users)

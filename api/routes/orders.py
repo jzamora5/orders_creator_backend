@@ -46,7 +46,7 @@ def get_user_orders(user_id):
 
     try:
         sort_response(request, orders_list)
-    except BaseException:
+    except KeyError:
         pass
 
     return jsonify(orders_list)
@@ -112,7 +112,7 @@ def get_order_list(order_id_list):
 
     try:
         sort_response(request, orders_list)
-    except BaseException:
+    except KeyError:
         pass
 
     return jsonify(orders_list)
@@ -145,7 +145,7 @@ def get_orders_by_shipment():
 
     try:
         sort_response(request, list_orders)
-    except BaseException:
+    except KeyError:
         pass
 
     return jsonify(list_orders)
@@ -189,7 +189,7 @@ def get_orders_by_term(term):
 
     try:
         sort_response(request, list_orders)
-    except BaseException:
+    except KeyError:
         pass
 
     return jsonify(list_orders)
@@ -199,7 +199,7 @@ def get_orders_by_term(term):
 @jwt_required()
 def get_orders_by_date(date_filter):
 
-    K, splt_char = 3,  '-'
+    K, splt_char = 3, '-'
     temp = date_filter.split(splt_char)
     dates = splt_char.join(temp[:K]), splt_char.join(temp[K:])
 
@@ -224,7 +224,7 @@ def get_orders_by_date(date_filter):
 
     try:
         sort_response(request, list_orders)
-    except BaseException:
+    except KeyError:
         pass
 
     return jsonify(list_orders)
