@@ -30,8 +30,10 @@ def login_user():
     if not user:
         abort(make_response(jsonify({"error": "User not found"}), 404))
 
-    is_valid_password = encrypt_password.is_valid(
-        user.password.encode(), data["password"])
+    # is_valid_password = encrypt_password.is_valid(
+    #     user.password.encode(), data["password"])
+
+    is_valid_password = user.password == data["password"]
 
     if not is_valid_password:
         abort(make_response(jsonify({"error": "Wrong password"}), 404))

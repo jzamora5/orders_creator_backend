@@ -24,9 +24,9 @@ class User(BaseModel, Base):
         """initializes User"""
         super().__init__(*args, **kwargs)
 
-    def __setattr__(self, name, value):
-        """Hashes the password with bcrypt"""
-        if name == "password":
-            encrypted = encrypt_password.hash_password(value)
-            value = encrypted
-        super().__setattr__(name, value)
+    # def __setattr__(self, name, value):
+    #     """Hashes the password with bcrypt"""
+    #     if name == "password":
+    #         encrypted = encrypt_password.hash_password(value)
+    #         value = encrypted
+    #     super().__setattr__(name, value)
