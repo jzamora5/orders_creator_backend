@@ -5,7 +5,6 @@ from api.routes import app_routes
 from flask import abort, jsonify, make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import storage
-from time import sleep
 
 
 @app_routes.route('/order/<order_id>/payments', methods=['POST'], strict_slashes=False)
@@ -64,7 +63,8 @@ def get_payments(order_id):
     return jsonify(payments_list)
 
 
-# @app_routes.route('/order/<order_id>/payments/<payment_id>', methods=['GET'], strict_slashes=False)
+# @app_routes.route('/order/<order_id>/payments/<payment_id>',
+#       methods=['GET'], strict_slashes=False)
 # @jwt_required()
 # def get_payment(order_id, payment_id):
 #     order = storage.get(Order, order_id)
@@ -87,7 +87,8 @@ def get_payments(order_id):
 #     return jsonify(payment_dict)
 
 
-# @app_routes.route('/order/<order_id>/payments/<payment_id>', methods=['PUT'], strict_slashes=False)
+# @app_routes.route('/order/<order_id>/payments/<payment_id>',
+#       methods=['PUT'], strict_slashes=False)
 # @jwt_required()
 # def put_payment(order_id, payment_id):
 #     order = storage.get(Order, order_id)
