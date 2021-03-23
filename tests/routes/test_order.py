@@ -7,11 +7,12 @@ from api.models.shipping import Shipping
 import pytest
 
 
-order = 4
+ORDER = 4
 TAXES_PERCENTAGE = 19
+COOKIE_IP = "0.0.0.0"
 
 
-@pytest.mark.order(order)
+@pytest.mark.order(ORDER)
 class TestCreate:
     """Tests for Creating Orders"""
 
@@ -92,7 +93,7 @@ class TestCreate:
             (19/100) + data["sub_total"]
 
         test_client.set_cookie(
-            "0.0.0.0", 'access_token_cookie', user_data["second_access_token"])
+            COOKIE_IP, 'access_token_cookie', user_data["second_access_token"])
 
         user_id = user_data["second_user_id"]
 
@@ -114,10 +115,10 @@ class TestCreate:
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
-            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+            COOKIE_IP, 'access_token_cookie', user_data["access_token"])
 
 
-@pytest.mark.order(order + 1)
+@pytest.mark.order(ORDER + 1)
 class TestGetAllUserOrders:
     """
     Test for getting orders of user
@@ -143,10 +144,10 @@ class TestGetAllUserOrders:
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
-            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+            COOKIE_IP, 'access_token_cookie', user_data["access_token"])
 
 
-@pytest.mark.order(order + 2)
+@pytest.mark.order(ORDER + 2)
 class TestGetOrder:
     """
     Test for getting an specific order
@@ -177,10 +178,10 @@ class TestGetOrder:
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
-            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+            COOKIE_IP, 'access_token_cookie', user_data["access_token"])
 
 
-@pytest.mark.order(order + 3)
+@pytest.mark.order(ORDER + 3)
 class TestGetOrdersList:
     """Tests for getting orders of order list"""
 
@@ -254,10 +255,10 @@ class TestGetOrdersList:
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
-            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+            COOKIE_IP, 'access_token_cookie', user_data["access_token"])
 
 
-@pytest.mark.order(order + 4)
+@pytest.mark.order(ORDER + 4)
 class TestGetOrdersByShipping:
     """Tests for getting orders based on shipping filter"""
 
@@ -362,10 +363,10 @@ class TestGetOrdersByShipping:
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
-            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+            COOKIE_IP, 'access_token_cookie', user_data["access_token"])
 
 
-@pytest.mark.order(order + 5)
+@pytest.mark.order(ORDER + 5)
 class TestGetOrdersBySearchTerm:
     """Tests for getting orders based on search term"""
 
@@ -387,10 +388,10 @@ class TestGetOrdersBySearchTerm:
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
-            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+            COOKIE_IP, 'access_token_cookie', user_data["access_token"])
 
 
-@pytest.mark.order(order + 6)
+@pytest.mark.order(ORDER + 6)
 class TestGetOrdersByDate:
     """Tests for getting orders based on date"""
 
@@ -412,7 +413,7 @@ class TestGetOrdersByDate:
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
-            "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+            COOKIE_IP, 'access_token_cookie', user_data["access_token"])
 
 
 # @pytest.mark.order(order + 3)
@@ -451,4 +452,4 @@ class TestGetOrdersByDate:
 #         assert response.status_code == 401
 #         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
 #         test_client.set_cookie(
-#             "0.0.0.0", 'access_token_cookie', user_data["access_token"])
+#             COOKIE_IP, 'access_token_cookie', user_data["access_token"])

@@ -2,12 +2,12 @@ import pytest
 from api.models.user import User
 from api.models.order import Order
 
-order = 2
+ORDER = 2
 
 TAXES_PERCENTAGE = 19
 
 
-@pytest.mark.order(order)
+@pytest.mark.order(ORDER)
 class TestGetAllUsers:
     """Tests for getting all users information"""
 
@@ -27,7 +27,7 @@ class TestGetAllUsers:
             "0.0.0.0", 'access_token_cookie', user_data["access_token"])
 
 
-@pytest.mark.order(order)
+@pytest.mark.order(ORDER)
 class TestGetUsersOrders:
     """Tests for getting orders of users list"""
 
