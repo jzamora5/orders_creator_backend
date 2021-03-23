@@ -1,13 +1,16 @@
 """Routes for orders endpoints"""
 
+from datetime import datetime
 from api.models.order import Order
 from api.models.user import User
 from api.routes import app_routes
-from datetime import datetime
 from flask import abort, jsonify, make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import storage
-from api.utils.sort import sortResponse
+from api.utils.sort import sort_response
+
+
+TAXES_PERCENTAGE = 19
 
 
 @app_routes.route('/order/<order_id>', methods=['GET'], strict_slashes=False)
@@ -42,8 +45,8 @@ def get_user_orders(user_id):
         orders_list.append(order.to_dict())
 
     try:
-        sortResponse(request, orders_list)
-    except:
+        sort_response(request, orders_list)
+    except BaseException:
         pass
 
     return jsonify(orders_list)
@@ -55,7 +58,6 @@ def post_order(user_id):
     """
     Creates an Order
     """
-    TAXES_PERCENTAGE = 19
 
     user = storage.get(User, user_id)
     if not user:
@@ -109,8 +111,8 @@ def get_order_list(order_id_list):
         orders_list.append(order.to_dict())
 
     try:
-        sortResponse(request, orders_list)
-    except:
+        sort_response(request, orders_list)
+    except BaseException:
         pass
 
     return jsonify(orders_list)
@@ -142,8 +144,8 @@ def get_orders_by_shipment():
             list_orders.append(order_dict)
 
     try:
-        sortResponse(request, list_orders)
-    except:
+        sort_response(request, list_orders)
+    except BaseException:
         pass
 
     return jsonify(list_orders)
@@ -186,8 +188,8 @@ def get_orders_by_term(term):
             list_orders.append(order_dict)
 
     try:
-        sortResponse(request, list_orders)
-    except:
+        sort_response(request, list_orders)
+    except BaseException:
         pass
 
     return jsonify(list_orders)
@@ -221,8 +223,8 @@ def get_orders_by_date(date_filter):
             list_orders.append(order_dict)
 
     try:
-        sortResponse(request, list_orders)
-    except:
+        sort_response(request, list_orders)
+    except BaseException:
         pass
 
     return jsonify(list_orders)

@@ -1,9 +1,9 @@
 """
 Abstract Model for all tables of database
 """
+import uuid
 from datetime import datetime
 from sqlalchemy import Column, String, DateTime
-import uuid
 
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -22,12 +22,12 @@ class BaseModel:
             for key, value in kwargs.items():
                 if key != "__class__":
                     setattr(self, key, value)
-            if kwargs.get("created_at", None) and type(self.created_at) is str:
+            if kwargs.get("created_at", None) and isinstance(self.created_at, str):
                 self.created_at = datetime.strptime(
                     kwargs["created_at"], TIME_FORMAT)
             else:
                 self.created_at = datetime.utcnow()
-            if kwargs.get("updated_at", None) and type(self.updated_at) is str:
+            if kwargs.get("updated_at", None) and isinstance(self.updated_at, str):
                 self.updated_at = datetime.strptime(
                     kwargs["updated_at"], TIME_FORMAT)
             else:
@@ -73,8 +73,8 @@ class BaseModel:
         storage.new(self)
         storage.save()
 
-    def delete(self):
-        """delete the current instance from the storage"""
-        from app import storage
+    # def delete(self):
+    #     """delete the current instance from the storage"""
+    #     from app import storage
 
-        storage.delete(self)
+    #     storage.delete(self)

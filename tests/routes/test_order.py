@@ -135,7 +135,7 @@ class TestGetAllUserOrders:
 
         response = test_client.get(f'api/orders/users/{user_id}')
         assert response.status_code == 200
-        assert type(response.json) == list
+        assert isinstance(response.json, list) == True
 
     def test_no_cookie(self, test_client, user_data):
         test_client.cookie_jar.clear()
@@ -263,7 +263,7 @@ class TestGetOrdersByShipping:
     """Tests for getting orders based on shipping filter"""
 
     def test_non_existing_orders(self, test_client, user_data):
-        response = test_client.get(f'api/orders/shipping?city=Oklahoma')
+        response = test_client.get('api/orders/shipping?city=Oklahoma')
         assert response.status_code == 200
         response_json = response.json
         assert response_json == []
@@ -350,7 +350,7 @@ class TestGetOrdersByShipping:
             instance.save()
 
         response = test_client.get(
-            f'api/orders/shipping?city=Denver&state=Colorado')
+            'api/orders/shipping?city=Denver&state=Colorado')
         assert response.status_code == 200
         response_json = response.json
 
@@ -359,7 +359,7 @@ class TestGetOrdersByShipping:
     def test_no_cookie(self, test_client, user_data):
         test_client.cookie_jar.clear()
         response = test_client.get(
-            f'api/orders/shipping?city=Denver&state=Colorado')
+            'api/orders/shipping?city=Denver&state=Colorado')
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
@@ -371,20 +371,20 @@ class TestGetOrdersBySearchTerm:
     """Tests for getting orders based on search term"""
 
     def test_random_term(self, test_client, user_data):
-        response = test_client.get(f'api/orders/search/cheese')
+        response = test_client.get('api/orders/search/cheese')
         assert response.status_code == 200
         response_json = response.json
         assert response_json == []
 
     def test_non_existing_orders(self, test_client, user_data):
-        response = test_client.get(f'api/orders/search/process')
+        response = test_client.get('api/orders/search/process')
         assert response.status_code == 200
         response_json = response.json
         assert response_json == []
 
     def test_no_cookie(self, test_client, user_data):
         test_client.cookie_jar.clear()
-        response = test_client.get(f'api/orders/search/process')
+        response = test_client.get('api/orders/search/process')
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(
@@ -396,20 +396,20 @@ class TestGetOrdersByDate:
     """Tests for getting orders based on date"""
 
     def test_old_dates(self, test_client, user_data):
-        response = test_client.get(f'api/orders/dates/21-12-19-19-01-20')
+        response = test_client.get('api/orders/dates/21-12-19-19-01-20')
         assert response.status_code == 200
         response_json = response.json
         assert response_json == []
 
     def test_current_dates(self, test_client, user_data):
-        response = test_client.get(f'api/orders/dates/21-12-20-19-01-22')
+        response = test_client.get('api/orders/dates/21-12-20-19-01-22')
         assert response.status_code == 200
         response_json = response.json
         assert len(response_json) > 0
 
     def test_no_cookie(self, test_client, user_data):
         test_client.cookie_jar.clear()
-        response = test_client.get(f'api/orders/dates/21-12-19-19-01-20')
+        response = test_client.get('api/orders/dates/21-12-19-19-01-20')
         assert response.status_code == 401
         assert response.json == {'msg': 'Missing cookie "access_token_cookie"'}
         test_client.set_cookie(

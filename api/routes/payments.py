@@ -64,55 +64,55 @@ def get_payments(order_id):
     return jsonify(payments_list)
 
 
-@app_routes.route('/order/<order_id>/payments/<payment_id>', methods=['GET'], strict_slashes=False)
-@jwt_required()
-def get_payment(order_id, payment_id):
-    order = storage.get(Order, order_id)
-    if not order:
-        abort(make_response(jsonify({"error": "Order not found"}), 404))
+# @app_routes.route('/order/<order_id>/payments/<payment_id>', methods=['GET'], strict_slashes=False)
+# @jwt_required()
+# def get_payment(order_id, payment_id):
+#     order = storage.get(Order, order_id)
+#     if not order:
+#         abort(make_response(jsonify({"error": "Order not found"}), 404))
 
-    payment = storage.get(Payment, payment_id)
-    if not payment:
-        abort(make_response(jsonify({"error": "Payment not found"}), 404))
+#     payment = storage.get(Payment, payment_id)
+#     if not payment:
+#         abort(make_response(jsonify({"error": "Payment not found"}), 404))
 
-    if payment.order.id != order.id:
-        abort(make_response(jsonify({"error": "Payment not found"}), 404))
+#     if payment.order.id != order.id:
+#         abort(make_response(jsonify({"error": "Payment not found"}), 404))
 
-    if get_jwt_identity() != order.user_id:
-        abort(make_response(jsonify({"error": "forbidden"}), 403))
+#     if get_jwt_identity() != order.user_id:
+#         abort(make_response(jsonify({"error": "forbidden"}), 403))
 
-    payment_dict = payment.to_dict()
-    del payment_dict["order"]
+#     payment_dict = payment.to_dict()
+#     del payment_dict["order"]
 
-    return jsonify(payment_dict)
+#     return jsonify(payment_dict)
 
 
-@app_routes.route('/order/<order_id>/payments/<payment_id>', methods=['PUT'], strict_slashes=False)
-@jwt_required()
-def put_payment(order_id, payment_id):
-    order = storage.get(Order, order_id)
-    if not order:
-        abort(make_response(jsonify({"error": "Order not found"}), 404))
+# @app_routes.route('/order/<order_id>/payments/<payment_id>', methods=['PUT'], strict_slashes=False)
+# @jwt_required()
+# def put_payment(order_id, payment_id):
+#     order = storage.get(Order, order_id)
+#     if not order:
+#         abort(make_response(jsonify({"error": "Order not found"}), 404))
 
-    payment = storage.get(Payment, payment_id)
-    if not payment:
-        abort(make_response(jsonify({"error": "Payment not found"}), 404))
+#     payment = storage.get(Payment, payment_id)
+#     if not payment:
+#         abort(make_response(jsonify({"error": "Payment not found"}), 404))
 
-    if payment.order.id != order.id:
-        abort(make_response(jsonify({"error": "Payment not found"}), 404))
+#     if payment.order.id != order.id:
+#         abort(make_response(jsonify({"error": "Payment not found"}), 404))
 
-    if get_jwt_identity() != order.user_id:
-        abort(make_response(jsonify({"error": "forbidden"}), 403))
+#     if get_jwt_identity() != order.user_id:
+#         abort(make_response(jsonify({"error": "forbidden"}), 403))
 
-    ignore = ['id', 'created_at', 'updated_at']
-    data = request.get_json()
-    for key, value in data.items():
-        if key not in ignore:
-            setattr(payment, key, value)
+#     ignore = ['id', 'created_at', 'updated_at']
+#     data = request.get_json()
+#     for key, value in data.items():
+#         if key not in ignore:
+#             setattr(payment, key, value)
 
-    payment.save()
+#     payment.save()
 
-    payment_dict = payment.to_dict()
-    del payment_dict["order"]
+#     payment_dict = payment.to_dict()
+#     del payment_dict["order"]
 
-    return make_response(jsonify(payment_dict), 200)
+#     return make_response(jsonify(payment_dict), 200)

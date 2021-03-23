@@ -6,7 +6,7 @@ from api.routes import app_routes
 from flask import abort, jsonify, make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.exc import IntegrityError
-from api.utils.sort import sortResponse
+from api.utils.sort import sort_response
 
 
 @app_routes.route('/users/all', methods=['GET'], strict_slashes=False)
@@ -23,7 +23,7 @@ def get_users():
         list_users.append(user_dict)
 
     try:
-        sortResponse(request, list_users)
+        sort_response(request, list_users)
     except:
         pass
 

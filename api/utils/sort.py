@@ -5,7 +5,7 @@ TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
 
 def getNestedValue(arr, i, keys=[]):
-    datesKeys = ["created_at", "updated_at"]
+    dates_keys = ["created_at", "updated_at"]
 
     if not keys:
         return arr[i]
@@ -13,7 +13,7 @@ def getNestedValue(arr, i, keys=[]):
     obj = arr[i]
     for key in keys:
         obj = obj[key]
-        if key in datesKeys:
+        if key in dates_keys:
             break
 
         if not obj:
@@ -57,7 +57,7 @@ def mergeSort(arr, keys=[]):
             k += 1
 
 
-def sortResponse(request, arr):
+def sort_response(request, arr):
     sort = request.args.get("sort", None)
 
     if not sort:
