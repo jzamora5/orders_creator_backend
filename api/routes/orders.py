@@ -161,14 +161,14 @@ def get_orders_by_term(term):
         check = 0
         order_dict = order.to_dict()
 
-        for key, value in order_dict.items():
+        for _, value in order_dict.items():
             if term in str(value).strip().lower():
                 check = 1
                 break
 
         if not check and order.shipping:
             shipping_dict = order.shipping.to_dict()
-            for key, value in shipping_dict.items():
+            for _, value in shipping_dict.items():
                 if term in str(value).strip().lower():
                     check = 1
                     break
@@ -207,7 +207,7 @@ def get_orders_by_date(date_filter):
     try:
         start = datetime.strptime(dates[0], '%d-%m-%y')
         end = datetime.strptime(dates[1], '%d-%m-%y')
-    except BaseException:
+    except ValueError:
         abort(make_response(
             jsonify({"error": "Dates must comply dd-mm-yy format"}), 404))
 
