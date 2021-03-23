@@ -5,7 +5,7 @@ from api.models.base_model import BaseModel
 from api.models.payment import Payment
 from sqlalchemy import Column, String, ForeignKey, Float, Boolean
 from sqlalchemy.orm import relationship
-from api.utils.sort import mergeSort
+from api.utils.sort import merge_sort
 
 
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
@@ -25,10 +25,6 @@ class Order(BaseModel, Base):
     payments = relationship("Payment",
                             backref="order",
                             cascade="all, delete, delete-orphan")
-
-    def __init__(self, *args, **kwargs):
-        """Initializes Order"""
-        super().__init__(*args, **kwargs)
 
     def to_dict(self):
         new_dict = super().to_dict()
@@ -57,7 +53,7 @@ class Order(BaseModel, Base):
             list_payments.append(payment.to_dict())
 
         if list_payments:
-            mergeSort(list_payments, ["created_at"])
+            merge_sort(list_payments, ["created_at"])
             new_dict["last_payment_date"] = payments[-1].created_at.strftime(
                 TIME_FORMAT)
         else:

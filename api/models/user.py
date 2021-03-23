@@ -20,10 +20,6 @@ class User(BaseModel, Base):
                           backref="user",
                           cascade="all, delete, delete-orphan")
 
-    def __init__(self, *args, **kwargs):
-        """initializes User"""
-        super().__init__(*args, **kwargs)
-
     # def __setattr__(self, name, value):
     #     """Hashes the password with bcrypt"""
     #     if name == "password":

@@ -14,7 +14,3 @@ class Payment(BaseModel, Base):
     total = Column(Float, nullable=False)
     status = Column(String(60), nullable=False)
     order_id = Column(String(60), ForeignKey('orders.id'), nullable=False)
-
-    def __init__(self, *args, **kwargs):
-        """Initializes Payment"""
-        super().__init__(*args, **kwargs)

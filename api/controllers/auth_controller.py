@@ -9,7 +9,7 @@ from flask_jwt_extended import (create_access_token,
 
 
 class AuthController:
-
+    """ Controller for Authentication Methods """
     @staticmethod
     def set_jwt_cookies(response, identity):
         access_token = create_access_token(identity=identity)

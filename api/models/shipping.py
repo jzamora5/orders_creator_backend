@@ -18,7 +18,3 @@ class Shipping(BaseModel, Base):
     order_id = Column(String(60), ForeignKey(
         'orders.id'), nullable=False)
     order = relationship("Order", back_populates="shipping")
-
-    def __init__(self, *args, **kwargs):
-        """Initializes Shipping"""
-        super().__init__(*args, **kwargs)

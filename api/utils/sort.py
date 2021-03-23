@@ -4,7 +4,7 @@ from flask import request
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
 
-def getNestedValue(arr, i, keys=None):
+def get_nested_value(arr, i, keys=None):
     dates_keys = ["created_at", "updated_at"]
 
     if not keys:
@@ -22,7 +22,7 @@ def getNestedValue(arr, i, keys=None):
     return obj
 
 
-def mergeSort(arr, keys=None):
+def merge_sort(arr, keys=None):
     if len(arr) > 1:
 
         mid = len(arr)//2
@@ -31,14 +31,14 @@ def mergeSort(arr, keys=None):
 
         right = arr[mid:]
 
-        mergeSort(left, keys)
+        merge_sort(left, keys)
 
-        mergeSort(right, keys)
+        merge_sort(right, keys)
 
         i = j = k = 0
 
         while i < len(left) and j < len(right):
-            if getNestedValue(left, i, keys) < getNestedValue(right, j, keys):
+            if get_nested_value(left, i, keys) < get_nested_value(right, j, keys):
                 arr[k] = left[i]
                 i += 1
             else:
@@ -71,7 +71,7 @@ def sort_response(request, arr):
 
     keys = sort.split(',')
 
-    mergeSort(arr, keys)
+    merge_sort(arr, keys)
 
     if reverse:
         arr.reverse()
