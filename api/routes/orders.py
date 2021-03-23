@@ -7,8 +7,7 @@ from datetime import datetime
 from flask import abort, jsonify, make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import storage
-
-TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
+from api.utils.sort import sortResponse
 
 
 @app_routes.route('/order/<order_id>', methods=['GET'], strict_slashes=False)
@@ -41,6 +40,11 @@ def get_user_orders(user_id):
     orders_list = []
     for order in orders:
         orders_list.append(order.to_dict())
+
+    try:
+        sortResponse(request, orders_list)
+    except:
+        pass
 
     return jsonify(orders_list)
 
@@ -104,6 +108,11 @@ def get_order_list(order_id_list):
 
         orders_list.append(order.to_dict())
 
+    try:
+        sortResponse(request, orders_list)
+    except:
+        pass
+
     return jsonify(orders_list)
 
 
@@ -131,6 +140,11 @@ def get_orders_by_shipment():
         if check:
             order_dict = order.to_dict()
             list_orders.append(order_dict)
+
+    try:
+        sortResponse(request, list_orders)
+    except:
+        pass
 
     return jsonify(list_orders)
 
@@ -171,6 +185,11 @@ def get_orders_by_term(term):
             order_dict = order.to_dict()
             list_orders.append(order_dict)
 
+    try:
+        sortResponse(request, list_orders)
+    except:
+        pass
+
     return jsonify(list_orders)
 
 
@@ -197,10 +216,14 @@ def get_orders_by_date(date_filter):
     list_orders = []
     for order in all_orders:
         updated_at = order.updated_at
-
         if start <= updated_at <= end:
             order_dict = order.to_dict()
             list_orders.append(order_dict)
+
+    try:
+        sortResponse(request, list_orders)
+    except:
+        pass
 
     return jsonify(list_orders)
 

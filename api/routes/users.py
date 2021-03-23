@@ -6,6 +6,7 @@ from api.routes import app_routes
 from flask import abort, jsonify, make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.exc import IntegrityError
+from api.utils.sort import sortResponse
 
 
 @app_routes.route('/users/all', methods=['GET'], strict_slashes=False)
@@ -20,6 +21,12 @@ def get_users():
         user_dict = user.to_dict()
         # del user_dict["order"]
         list_users.append(user_dict)
+
+    try:
+        sortResponse(request, list_users)
+    except:
+        pass
+
     return jsonify(list_users)
 
 
