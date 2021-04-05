@@ -11,9 +11,11 @@ def create_app():
 
     app.config.from_pyfile('config/settings.py')
 
-    JWTManager(app)
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-    # cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+    # app.config['CORS_ORIGINS'] = ['localhost', '127.0.0.1']
+
+    JWTManager(app)
 
     @app.errorhandler(404)
     def not_found(error):
